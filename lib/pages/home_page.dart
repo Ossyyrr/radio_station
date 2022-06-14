@@ -26,8 +26,8 @@ class HomePage extends StatelessWidget {
               return ListTile(
                 title: Text(station.name),
                 onTap: () async {
-                  // audioPlayerService.play(station.url);
                   stationApiService.currentStationIndex = index;
+                  audioPlayerService.play(station.url);
                   await Navigator.pushNamed(context, 'station');
                   audioPlayerService.stop();
                 },

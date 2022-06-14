@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:radio_station/services/station_api_service.dart';
 import 'package:radio_station/widgets/sound_animation.dart';
 import 'package:radio_station/widgets/station_controll.dart';
+import 'package:radio_station/widgets/station_image.dart';
 
 class StationPage extends StatelessWidget {
   const StationPage({Key? key}) : super(key: key);
@@ -27,9 +28,9 @@ class StationPage extends StatelessWidget {
             children: [
               Stack(
                 alignment: Alignment.bottomCenter,
-                children: const [
-                  SoundAnimation(),
-                  _StationImage(),
+                children: [
+                  const SoundAnimation(),
+                  StationImage(image: stationApiService.currentStation.favicon),
                 ],
               ),
               const SizedBox(height: 20),
@@ -85,34 +86,6 @@ class StationPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _StationImage extends StatelessWidget {
-  const _StationImage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationApiService>(context);
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
-      child: Image.network(
-        stationApiService.currentStation.favicon,
-        fit: BoxFit.cover,
-        width: 60,
-        errorBuilder: (context, error, stackTrace) {
-          return const Icon(Icons.error, size: 60);
-        },
-        loadingBuilder: (context, child, progress) {
-          return progress == null
-              ? child
-              : const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white));
-        },
       ),
     );
   }
