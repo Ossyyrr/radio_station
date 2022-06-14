@@ -7,23 +7,31 @@ import 'package:radio_station/models/station.dart';
 class StationApiService with ChangeNotifier {
   late Client client;
   final List<Station> _stations = [];
+  int _currentStationIndex = 0;
 
   List<Station> get stations => _stations;
-  //set stations(String ...) => _stations(...);
+
+  int get currentStationIndex => _currentStationIndex;
+  set currentStationIndex(int index) {
+    _currentStationIndex = index;
+    notifyListeners();
+  }
+
+  Station get currentStation => _stations[_currentStationIndex];
+  Station get nextStation => _stations[_currentStationIndex + 1];
+  Station get previousStation => _stations[_currentStationIndex - 1];
 
   StationApiService() {
-    initConfig();
+    //initConfig();
   }
 
-  void initConfig() async {
+  Future<void> initConfig() async {
     client = Client();
-    print('Init config');
-    getStations();
-
-    //notifyListeners();
+    print('Init config StationApiService');
+    await getStations();
   }
 
-  void getStations() async {
+  Future<void> getStations() async {
     final url = Uri.parse('http://all.api.radio-browser.info/json/stations?limit=10');
     final response = await get(url);
 

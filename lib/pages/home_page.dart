@@ -12,15 +12,36 @@ class HomePage extends StatelessWidget {
     final audioPlayerService = Provider.of<AudioPlayerService>(context);
 
     return Scaffold(
-      body: Center(
-          child: ListView.builder(
-        itemCount: stationApiService.stations.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(stationApiService.stations[index].name),
-          );
+      appBar: AppBar(
+        title: const Text('as'),
+      ),
+      body: FutureBuilder(
+        future: stationApiService.initConfig(),
+        builder: (context, snapshot) {
+          return Center(
+              child: ListView.builder(
+            itemCount: stationApiService.stations.length,
+            itemBuilder: (context, index) {
+              final station = stationApiService.stations[index];
+              return ListTile(
+                title: Text(station.name),
+                onTap: () async {
+                  // audioPlayerService.play(station.url);
+                  stationApiService.currentStationIndex = index;
+                  await Navigator.pushNamed(context, 'station');
+                  audioPlayerService.stop();
+                },
+                trailing: IconButton(
+                  icon: const Icon(Icons.stop),
+                  onPressed: () {
+                    audioPlayerService.stop();
+                  },
+                ),
+              );
+            },
+          ));
         },
-      )),
+      ),
     );
   }
 }
