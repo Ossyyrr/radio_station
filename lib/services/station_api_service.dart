@@ -39,6 +39,7 @@ class StationApiService with ChangeNotifier {
     print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
+      _stations.clear();
       final List data = jsonDecode(response.body);
       for (var station in data) {
         _stations.add(Station.fromJson(station));
