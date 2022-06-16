@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:radio_station/services/station_service.dart';
+import 'package:radio_station/models/station.dart';
+import 'package:radio_station/services/station_api_service.dart';
 import 'package:radio_station/utils/station_utils.dart';
+import 'package:radio_station/widgets/search.dart';
 import 'package:radio_station/widgets/station_image.dart';
 import 'package:radio_station/widgets/wheel.dart';
 
@@ -10,8 +11,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationService>(context, listen: false);
-
     return Container(
       decoration: const BoxDecoration(
           gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
@@ -20,30 +19,36 @@ class HomePage extends StatelessWidget {
       ])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: FutureBuilder(
-          future: stationApiService.initConfig(),
+        body: FutureBuilder<List<Station>>(
+          future: StationApiService().getStations(),
           builder: (context, snapshot) {
-            return SafeArea(
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //TODO  const Text('Buscador'),
-
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: stationApiService.stations.length,
-                      itemBuilder: (context, index) {
-                        return StationListItem(index: index);
-                      },
+            if (snapshot.hasData) {
+              final stations = snapshot.data;
+              return SafeArea(
+                child: Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //TODO  const Text('Buscador'),
+                    const Search(),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: stations!.length,
+                        itemBuilder: (context, index) {
+                          return _StationListItem(index: index);
+                        },
+                      ),
                     ),
-                  ),
-                  Transform.translate(
-                    offset: Offset(0, MediaQuery.of(context).size.width / 2),
-                    child: const Wheel(),
-                  ),
-                ],
-              )),
+                    Transform.translate(
+                      offset: Offset(0, MediaQuery.of(context).size.width / 2),
+                      child: const Wheel(),
+                    ),
+                  ],
+                )),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           },
         ),
@@ -52,8 +57,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class StationListItem extends StatelessWidget {
-  const StationListItem({
+class _StationListItem extends StatelessWidget {
+  const _StationListItem({
     Key? key,
     required this.index,
   }) : super(key: key);
@@ -62,8 +67,7 @@ class StationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationService>(context);
-    final station = stationApiService.stations[index];
+    final station = StationApiService().stations[index];
 
     return GestureDetector(
       onTap: () => StationUtils.onTap(context, index),

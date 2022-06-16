@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_station/services/station_service.dart';
+import 'package:radio_station/providers/station_provider.dart';
+import 'package:radio_station/services/station_api_service.dart';
 import 'package:radio_station/widgets/sound_animation.dart';
 import 'package:radio_station/widgets/station_controll.dart';
 import 'package:radio_station/widgets/station_image.dart';
 
-class StationPage extends StatelessWidget {
+class StationPage extends StatefulWidget {
   const StationPage({Key? key}) : super(key: key);
 
   @override
+  State<StationPage> createState() => _StationPageState();
+}
+
+class _StationPageState extends State<StationPage> {
+  @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationService>(context);
+    final stationProvider = Provider.of<StationProvider>(context);
 
     return Container(
       decoration: const BoxDecoration(
@@ -18,10 +24,10 @@ class StationPage extends StatelessWidget {
               begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Colors.purple, Colors.orange])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0,
-        // ),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -30,14 +36,14 @@ class StationPage extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 children: [
                   const SoundAnimation(),
-                  StationImage(image: stationApiService.currentStation.favicon),
+                  StationImage(image: StationApiService().stations[stationProvider.currentStationIndex].favicon),
                 ],
               ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  stationApiService.currentStation.name,
+                  StationApiService().stations[stationProvider.currentStationIndex].name,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                 ),
@@ -45,7 +51,7 @@ class StationPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  stationApiService.currentStation.country,
+                  StationApiService().stations[stationProvider.currentStationIndex].country,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
@@ -63,9 +69,9 @@ class StationPage extends StatelessWidget {
                     color: Colors.black38,
                   ),
                   child: Column(
-                    children: const [
-                      StationControll(),
-                      SizedBox(height: 18),
+                    children: [
+                      StationControll(index: stationProvider.currentStationIndex),
+                      const SizedBox(height: 18),
                     ],
                   ),
                 ),

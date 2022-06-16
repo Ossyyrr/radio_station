@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_station/services/audioplayer_service.dart';
-import 'package:radio_station/services/station_service.dart';
+import 'package:radio_station/providers/audioplayer_provider.dart';
+import 'package:radio_station/providers/station_provider.dart';
 
 class PlayButton extends StatefulWidget {
   const PlayButton({Key? key}) : super(key: key);
@@ -31,9 +31,10 @@ class _PlayButtonState extends State<PlayButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationService>(context);
-    final audioPlayerService = Provider.of<AudioPlayerService>(context);
-    audioPlayerService.isPlaying ? playAnimation.forward() : playAnimation.reverse();
+    final stationProvider = Provider.of<StationProvider>(context);
+
+    final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
+    audioPlayerProvider.isPlaying ? playAnimation.forward() : playAnimation.reverse();
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -41,12 +42,12 @@ class _PlayButtonState extends State<PlayButton> with TickerProviderStateMixin {
         IconButton(
           iconSize: 40,
           onPressed: () {
-            if (audioPlayerService.isPlaying) {
-              audioPlayerService.stop();
-              audioPlayerService.isPlaying = false;
+            if (audioPlayerProvider.isPlaying) {
+              audioPlayerProvider.stop();
+              audioPlayerProvider.isPlaying = false;
             } else {
-              audioPlayerService.play(stationApiService.currentStation.url);
-              audioPlayerService.isPlaying = true;
+              audioPlayerProvider.play(stationProvider.currentStation.url);
+              audioPlayerProvider.isPlaying = true;
               musicalNotesAnimation.forward().then((value) => musicalNotesAnimation.value = 0.1);
             }
             setState(() {});
@@ -57,7 +58,7 @@ class _PlayButtonState extends State<PlayButton> with TickerProviderStateMixin {
             progress: playAnimation,
           ),
         ),
-        audioPlayerService.isLoading
+        audioPlayerProvider.isLoading
             ? const CircularProgressIndicator(
                 color: Colors.white,
                 strokeWidth: 2,

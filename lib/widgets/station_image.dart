@@ -14,10 +14,14 @@ class StationImage extends StatelessWidget {
         image,
         fit: BoxFit.cover,
         width: 60,
+        height: 60,
         errorBuilder: (context, error, stackTrace) {
           return const Icon(Icons.error, size: 60);
         },
         loadingBuilder: (context, child, progress) {
+          print('*********');
+          print(image);
+
           return progress == null
               ? child
               : const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white));

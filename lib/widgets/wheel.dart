@@ -3,7 +3,8 @@ import 'dart:math' as math;
 import 'package:circle_list/circle_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_station/services/station_service.dart';
+import 'package:radio_station/providers/home_provider.dart';
+import 'package:radio_station/services/station_api_service.dart';
 import 'package:radio_station/utils/station_utils.dart';
 import 'package:radio_station/widgets/station_image.dart';
 
@@ -19,7 +20,7 @@ class Wheel extends StatefulWidget {
 class _WheelState extends State<Wheel> {
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationService>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
 
     return Stack(
       alignment: Alignment.topCenter,
@@ -47,25 +48,27 @@ class _WheelState extends State<Wheel> {
             offset: const Offset(0, -40),
             child: SizedBox(
               width: MediaQuery.of(context).size.width / 3,
-              child: Text(
-                stationApiService.stations[stationApiService.wheelIndex].name,
-                textAlign: TextAlign.center,
-                maxLines: 3,
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              child: StationApiService().stations.isEmpty
+                  ? const SizedBox()
+                  : Text(
+                      StationApiService().stations[homeProvider.wheelIndex].name,
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
             ),
           ),
           onDragStart: (PolarCoord polarCoord) {
-            stationApiService.dragStartPosition = (polarCoord.angle * 180 / math.pi) + 180;
+            homeProvider.dragStartPosition = (polarCoord.angle * 180 / math.pi) + 180;
           },
           onDragUpdate: (PolarCoord polarCoord) {
-            stationApiService.dragUpdatePosition = (polarCoord.angle * 180 / math.pi) + 180;
+            homeProvider.dragUpdatePosition = (polarCoord.angle * 180 / math.pi) + 180;
           },
           onDragEnd: () {
-            stationApiService.calculatePositionWheel();
+            homeProvider.calculatePositionWheel();
           },
           origin: const Offset(0, 0),
-          children: List.generate(stationApiService.numberOfItems, (index) {
+          children: List.generate(StationApiService().numberOfItems, (index) {
             return _WheelStation(index: index);
           }),
         ),
@@ -82,7 +85,6 @@ class _WheelStation extends StatelessWidget {
   final int index;
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationService>(context);
     return GestureDetector(
       onTap: () {
         print(index);
@@ -95,20 +97,12 @@ class _WheelStation extends StatelessWidget {
             height: 70,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
-              color: Colors.blue,
+              color: Colors.blueAccent,
             ),
-            child: stationApiService.stations.isEmpty
+            child: StationApiService().stations.isEmpty
                 ? const SizedBox()
-                : StationImage(image: stationApiService.stations[index].favicon),
+                : StationImage(image: StationApiService().stations[index].favicon),
           ),
-          // const SizedBox(width: 20),
-          // SizedBox(
-          //   width: 100,
-          //   child: Text(
-          //     stationApiService.stations[index].name.trim(),
-          //     style: const TextStyle(color: Colors.white, fontSize: 14),
-          //   ),
-          // ),
         ],
       ),
     );

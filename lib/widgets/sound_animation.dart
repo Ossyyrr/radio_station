@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_station/services/audioplayer_service.dart';
+import 'package:radio_station/providers/audioplayer_provider.dart';
 
 class SoundAnimation extends StatefulWidget {
   const SoundAnimation({Key? key}) : super(key: key);
@@ -27,9 +27,9 @@ class _SoundAnimationState extends State<SoundAnimation> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    final audioPlayerService = Provider.of<AudioPlayerService>(context);
-    print('audioPlayerService.isPlaying: ${audioPlayerService.isPlaying}');
-    audioPlayerService.isPlaying ? _controller.repeat() : _controller.stop();
+    final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
+    print('audioPlayerProvider.isPlaying: ${audioPlayerProvider.isPlaying}');
+    audioPlayerProvider.isPlaying ? _controller.repeat() : _controller.stop();
     return Lottie.asset(
       'assets/sound.json',
       controller: _controller,
