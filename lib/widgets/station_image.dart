@@ -19,9 +19,6 @@ class StationImage extends StatelessWidget {
           return const Icon(Icons.error, size: 60);
         },
         loadingBuilder: (context, child, progress) {
-          print('*********');
-          print(image);
-
           return progress == null
               ? child
               : const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white));
