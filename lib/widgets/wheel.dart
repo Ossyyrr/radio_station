@@ -21,36 +21,55 @@ class _WheelState extends State<Wheel> {
   Widget build(BuildContext context) {
     final stationApiService = Provider.of<StationService>(context);
 
-    return CircleList(
-      showInitialAnimation: true,
-      animationSetting: AnimationSetting(curve: Curves.easeOutBack),
-      outerRadius: MediaQuery.of(context).size.width / 2,
-      rotateMode: RotateMode.onlyChildrenRotate,
-      centerWidget: Transform.translate(
-        offset: const Offset(0, -40),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 3,
-          child: Text(
-            stationApiService.stations[stationApiService.wheelIndex].name,
-            textAlign: TextAlign.center,
-            maxLines: 3,
-            style: const TextStyle(color: Colors.white, fontSize: 18),
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Transform.rotate(
+          angle: 45 * math.pi / 180,
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(1000),
+                gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                  Colors.orange,
+                  Colors.purple,
+                ])),
           ),
         ),
-      ),
-      onDragStart: (PolarCoord polarCoord) {
-        stationApiService.dragStartPosition = (polarCoord.angle * 180 / math.pi) + 180;
-      },
-      onDragUpdate: (PolarCoord polarCoord) {
-        stationApiService.dragUpdatePosition = (polarCoord.angle * 180 / math.pi) + 180;
-      },
-      onDragEnd: () {
-        stationApiService.calculatePositionWheel();
-      },
-      origin: const Offset(0, 0),
-      children: List.generate(stationApiService.numberOfItems, (index) {
-        return _WheelStation(index: index);
-      }),
+        CircleList(
+          initialAngle: (3 * 180 / math.pi),
+          showInitialAnimation: true,
+          animationSetting: AnimationSetting(curve: Curves.easeOutBack),
+          outerRadius: MediaQuery.of(context).size.width / 2,
+          rotateMode: RotateMode.onlyChildrenRotate,
+          centerWidget: Transform.translate(
+            offset: const Offset(0, -40),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width / 3,
+              child: Text(
+                stationApiService.stations[stationApiService.wheelIndex].name,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          onDragStart: (PolarCoord polarCoord) {
+            stationApiService.dragStartPosition = (polarCoord.angle * 180 / math.pi) + 180;
+          },
+          onDragUpdate: (PolarCoord polarCoord) {
+            stationApiService.dragUpdatePosition = (polarCoord.angle * 180 / math.pi) + 180;
+          },
+          onDragEnd: () {
+            stationApiService.calculatePositionWheel();
+          },
+          origin: const Offset(0, 0),
+          children: List.generate(stationApiService.numberOfItems, (index) {
+            return _WheelStation(index: index);
+          }),
+        ),
+      ],
     );
   }
 }

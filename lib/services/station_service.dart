@@ -9,7 +9,7 @@ class StationService with ChangeNotifier {
   final List<Station> _stations = [];
   final _numberOfItems = 10;
   int _currentStationIndex = 0;
-  int wheelIndex = 0;
+  int wheelIndex = 4;
 
 // TODO getters setters  -  separar en un part of
   double _currentAngle = 0;
@@ -62,7 +62,8 @@ class StationService with ChangeNotifier {
   void calculatePositionWheel() {
     double angle = dragUpdatePosition - dragStartPosition;
     _currentAngle = (_currentAngle + angle) % 360;
-    wheelIndex = (7 + ((_currentAngle) / (360 / _numberOfItems)).floor()) % 10;
+    print('Angle: $_currentAngle');
+    wheelIndex = ((4 + (((_currentAngle + 20) % 360) / (360 / _numberOfItems)).floor()) % 10).floor();
     print('CALCULATE wheel index: $wheelIndex');
     notifyListeners();
   }
