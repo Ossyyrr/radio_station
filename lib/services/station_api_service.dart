@@ -29,6 +29,7 @@ class StationApiService with ChangeNotifier {
     client = Client();
     print('Init config StationApiService');
     await getStations();
+    notifyListeners();
   }
 
   Future<void> getStations() async {

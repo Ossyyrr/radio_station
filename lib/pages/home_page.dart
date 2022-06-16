@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:radio_station/services/audioplayer_service.dart';
 import 'package:radio_station/services/station_api_service.dart';
 import 'package:radio_station/widgets/station_image.dart';
+import 'package:radio_station/widgets/wheel.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                 children: [
                   const Text('Buscador'),
+                  const Wheel(),
                   Expanded(
                     child: ListView.builder(
                       itemCount: stationApiService.stations.length,
@@ -59,16 +61,6 @@ class StationItem extends StatelessWidget {
     final audioPlayerService = Provider.of<AudioPlayerService>(context);
     final station = stationApiService.stations[index];
     final isPair = index % 2 == 0;
-    // return ListTile(
-    //   title: Text(station.name),
-    //   onTap: () async {
-    //     stationApiService.currentStationIndex = index;
-    //     audioPlayerService.play(station.url);
-    //     await Navigator.pushNamed(context, 'station');
-    //     audioPlayerService.stop();
-    //   },
-
-    // );
 
     return GestureDetector(
       onTap: () async {
