@@ -97,7 +97,7 @@ class _WheelStation extends StatelessWidget {
             height: 70,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(1000),
-              color: Colors.blueAccent,
+              border: Border.all(color: Colors.orange, width: 3),
             ),
             child: StationApiService().stations.isEmpty
                 ? const SizedBox()

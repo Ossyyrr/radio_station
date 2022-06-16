@@ -19,4 +19,9 @@ class HomeProvider with ChangeNotifier {
     debugPrint('CALCULATE wheel index: $wheelIndex - ${StationApiService().stations[wheelIndex].name}');
     notifyListeners();
   }
+
+  void update() {
+    _currentAngle = _currentAngle;
+    notifyListeners();
+  }
 }

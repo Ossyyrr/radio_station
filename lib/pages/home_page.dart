@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:radio_station/models/station.dart';
+import 'package:radio_station/providers/home_provider.dart';
 import 'package:radio_station/services/station_api_service.dart';
 import 'package:radio_station/utils/station_utils.dart';
 import 'package:radio_station/widgets/search.dart';
@@ -29,16 +31,25 @@ class HomePage extends StatelessWidget {
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //TODO  const Text('Buscador'),
+                    const Spacer(),
                     const Search(),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: stations!.length,
-                        itemBuilder: (context, index) {
-                          return _StationListItem(index: index);
-                        },
-                      ),
+
+                    // Expanded(
+                    //   child: ListView.builder(
+                    //     itemCount: stations!.length,
+                    //     itemBuilder: (context, index) {
+                    //       return _StationListItem(index: index);
+                    //     },
+                    //   ),
+                    // ),
+                    const Spacer(),
+
+                    const Text(
+                      'Radio Station',
+                      style: TextStyle(color: Colors.white, fontSize: 40),
                     ),
+                    const Spacer(),
+                    const _nextButton(),
                     Transform.translate(
                       offset: Offset(0, MediaQuery.of(context).size.width / 2),
                       child: const Wheel(),
@@ -51,6 +62,47 @@ class HomePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _nextButton extends StatelessWidget {
+  const _nextButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+
+        StationUtils.onTap(context, homeProvider.wheelIndex);
+      },
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+            Colors.purple,
+            Colors.orange,
+          ]),
+          borderRadius: BorderRadius.circular(100),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: Colors.white,
+          size: 35,
         ),
       ),
     );

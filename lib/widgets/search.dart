@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:radio_station/providers/home_provider.dart';
 import 'package:radio_station/services/station_api_service.dart';
 
 class Search extends StatefulWidget {
@@ -66,6 +68,10 @@ class _SearchState extends State<Search> {
 
   Future<void> _onSearchTextChanged(String text) async {
     print('searching - $text');
-    StationApiService().getStations(name: 'kiss');
+    final stations = await StationApiService().getStations(name: text.trim());
+    if (stations.length >= StationApiService().numberOfItems) {
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      homeProvider.update();
+    }
   }
 }

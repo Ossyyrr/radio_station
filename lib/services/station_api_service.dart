@@ -17,9 +17,8 @@ class StationApiService {
   factory StationApiService() {
     return _StationApiService;
   }
-  //
-
   StationApiService._internal();
+  //
 
   Future<List<Station>> getStations({String name = ''}) async {
     final url = Uri.parse('http://all.api.radio-browser.info/json/stations/search?name=$name&limit=$_numberOfItems');
@@ -29,10 +28,14 @@ class StationApiService {
     debugPrint('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      _stations.clear();
       final List data = jsonDecode(response.body);
-      for (var station in data) {
-        _stations.add(Station.fromJson(station));
+      if (data.length >= _numberOfItems) {
+        _stations.clear();
+        for (var station in data) {
+          _stations.add(Station.fromJson(station));
+        }
+      } else {
+        debugPrint('Not enough stations');
       }
       return _stations;
     } else {
