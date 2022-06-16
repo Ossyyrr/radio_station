@@ -8,7 +8,7 @@ class StationUtils {
   static void onTap(BuildContext context, int index) async {
     final stationProvider = Provider.of<StationProvider>(context, listen: false);
     final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context, listen: false);
-    print('on TAP - $index');
+    debugPrint('on TAP - $index');
     stationProvider.currentStationIndex = index;
     audioPlayerProvider.play(StationApiService().stations[index].url);
     await Navigator.pushNamed(context, 'station');

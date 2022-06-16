@@ -21,7 +21,7 @@ class StationControll extends StatelessWidget {
             stationProvider.currentStationIndex =
                 (stationProvider.currentStationIndex - 1) % StationApiService().stations.length;
             audioPlayerProvider.play(stationProvider.previousStation.url);
-            print(stationProvider.currentStationIndex);
+            //  print(stationProvider.currentStationIndex);
           },
           icon: Icon(
             Icons.arrow_back_ios_rounded,
@@ -35,7 +35,7 @@ class StationControll extends StatelessWidget {
             stationProvider.currentStationIndex =
                 (stationProvider.currentStationIndex + 1) % StationApiService().stations.length;
             audioPlayerProvider.play(stationProvider.nextStation.url);
-            print(stationProvider.currentStationIndex);
+            //   print(stationProvider.currentStationIndex);
           },
           icon: Icon(
             Icons.arrow_forward_ios_rounded,

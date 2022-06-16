@@ -40,20 +40,29 @@ class _StationPageState extends State<StationPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  StationApiService().stations[stationProvider.currentStationIndex].name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  StationApiService().stations[stationProvider.currentStationIndex].country,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
+              SizedBox(
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        StationApiService().stations[stationProvider.currentStationIndex].name.trim(),
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        StationApiService().stations[stationProvider.currentStationIndex].country.trim(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Transform.translate(
@@ -76,22 +85,48 @@ class _StationPageState extends State<StationPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(40),
-                      topLeft: Radius.circular(40),
-                    ),
-                    color: Color(0xfffafafa),
-                  ),
-                ),
+              const Expanded(
+                child: _createdBy(),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _createdBy extends StatelessWidget {
+  const _createdBy({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 150,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(40),
+          topLeft: Radius.circular(40),
+        ),
+        color: Color(0xfffafafa),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Center(
+              child: Text(
+            'Created by',
+            style: TextStyle(color: Colors.black87, fontSize: 16),
+          )),
+          Center(
+              child: Text(
+            'Patricia Manzanero',
+            style: TextStyle(color: Colors.black87, fontSize: 20),
+          )),
+        ],
       ),
     );
   }

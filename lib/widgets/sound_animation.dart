@@ -28,7 +28,7 @@ class _SoundAnimationState extends State<SoundAnimation> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     final audioPlayerProvider = Provider.of<AudioPlayerProvider>(context);
-    print('audioPlayerProvider.isPlaying: ${audioPlayerProvider.isPlaying}');
+    debugPrint('audioPlayerProvider.isPlaying: ${audioPlayerProvider.isPlaying}');
     audioPlayerProvider.isPlaying ? _controller.repeat() : _controller.stop();
     return Lottie.asset(
       'assets/sound.json',

@@ -21,7 +21,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xffEEEEEE),
         borderRadius: BorderRadius.circular(100),
@@ -67,7 +67,7 @@ class _SearchState extends State<Search> {
   }
 
   Future<void> _onSearchTextChanged(String text) async {
-    print('searching - $text');
+    debugPrint('searching - $text');
     final stations = await StationApiService().getStations(name: text.trim());
     if (stations.length >= StationApiService().numberOfItems) {
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);

@@ -19,7 +19,7 @@ class AudioPlayerProvider with ChangeNotifier {
   }
 
   void initConfig() async {
-    print('Init config AudioPlayer');
+    debugPrint('Init config AudioPlayer');
     _player = AudioPlayer();
   }
 

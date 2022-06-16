@@ -86,10 +86,7 @@ class _WheelStation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        print(index);
-        StationUtils.onTap(context, index);
-      },
+      onTap: () => StationUtils.onTap(context, index),
       child: Row(
         children: [
           Container(
