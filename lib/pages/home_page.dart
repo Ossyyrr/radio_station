@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_station/services/audioplayer_service.dart';
-import 'package:radio_station/services/station_api_service.dart';
+import 'package:radio_station/services/station_service.dart';
+import 'package:radio_station/utils/station_utils.dart';
 import 'package:radio_station/widgets/station_image.dart';
 import 'package:radio_station/widgets/wheel.dart';
 
@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationApiService>(context);
+    final stationApiService = Provider.of<StationService>(context, listen: false);
 
     return Container(
       decoration: const BoxDecoration(
@@ -26,16 +26,21 @@ class HomePage extends StatelessWidget {
             return SafeArea(
               child: Center(
                   child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Buscador'),
-                  const Wheel(),
+                  //TODO  const Text('Buscador'),
+
                   Expanded(
                     child: ListView.builder(
                       itemCount: stationApiService.stations.length,
                       itemBuilder: (context, index) {
-                        return StationItem(index: index);
+                        return StationListItem(index: index);
                       },
                     ),
+                  ),
+                  Transform.translate(
+                    offset: Offset(0, MediaQuery.of(context).size.width / 2),
+                    child: const Wheel(),
                   ),
                 ],
               )),
@@ -47,8 +52,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class StationItem extends StatelessWidget {
-  const StationItem({
+class StationListItem extends StatelessWidget {
+  const StationListItem({
     Key? key,
     required this.index,
   }) : super(key: key);
@@ -57,18 +62,11 @@ class StationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationApiService>(context);
-    final audioPlayerService = Provider.of<AudioPlayerService>(context);
+    final stationApiService = Provider.of<StationService>(context);
     final station = stationApiService.stations[index];
-    final isPair = index % 2 == 0;
 
     return GestureDetector(
-      onTap: () async {
-        stationApiService.currentStationIndex = index;
-        audioPlayerService.play(station.url);
-        await Navigator.pushNamed(context, 'station');
-        audioPlayerService.stop();
-      },
+      onTap: () => StationUtils.onTap(context, index),
       child: Container(
         color: Colors.transparent,
         child: Column(

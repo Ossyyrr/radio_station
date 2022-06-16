@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:radio_station/pages/home_page.dart';
 import 'package:radio_station/pages/station_page.dart';
 import 'package:radio_station/services/audioplayer_service.dart';
-import 'package:radio_station/services/station_api_service.dart';
+import 'package:radio_station/services/station_service.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => StationApiService()),
+        ChangeNotifierProvider(create: (_) => StationService()),
         ChangeNotifierProvider(create: (_) => AudioPlayerService()),
       ],
       child: MaterialApp(

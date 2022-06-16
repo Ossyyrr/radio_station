@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:radio_station/services/station_api_service.dart';
+import 'package:radio_station/services/station_service.dart';
 import 'package:radio_station/widgets/sound_animation.dart';
 import 'package:radio_station/widgets/station_controll.dart';
 import 'package:radio_station/widgets/station_image.dart';
@@ -10,7 +10,7 @@ class StationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationApiService>(context);
+    final stationApiService = Provider.of<StationService>(context);
 
     return Container(
       decoration: const BoxDecoration(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:radio_station/services/audioplayer_service.dart';
-import 'package:radio_station/services/station_api_service.dart';
+import 'package:radio_station/services/station_service.dart';
 
 class PlayButton extends StatefulWidget {
   const PlayButton({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class _PlayButtonState extends State<PlayButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final stationApiService = Provider.of<StationApiService>(context);
+    final stationApiService = Provider.of<StationService>(context);
     final audioPlayerService = Provider.of<AudioPlayerService>(context);
     audioPlayerService.isPlaying ? playAnimation.forward() : playAnimation.reverse();
     return Stack(
